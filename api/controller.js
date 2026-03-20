@@ -45,7 +45,7 @@ function createComic(req, res) {
         lentOut
     };
 
-    comicsModel.createComic(comic, function (err, lastID) {
+    model.createComic(comic, function (err, lastID) {
         if(err){
             return res.status(500).json({ error: err.message });
         }

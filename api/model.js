@@ -1,7 +1,4 @@
-const { getComicById } = require("./controller");
-
 const sqlite3 = require("sqlite3").verbose();
-
 const db = new sqlite3.Database("./comics.db");
 
 db.serialize(() => {
@@ -113,6 +110,10 @@ function deleteAllComics(callback){
 
         callback(null);
     });
+}
+
+function getComicById(id, callback){
+    db.get(`SELECT * FROM comics WHERE id = ?`, [id], callback);
 }
 
 function updateComicById(id, comic, callback) {

@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const sqlite3 = require("sqlite3").verbose();
+const controller = require("./controller.js");
 
 const app = express();
 const PORT = 3000;
@@ -15,25 +15,25 @@ app.get("/", (req, res) => {
 
 
 // GET /api
-app.get("/api",);
+app.get("/api", controller.getAllComics);
 
 // POST /api
-app.post("/api",);
+app.post("/api", controller.createComic);
 
 // PUT /api
-app.put("/api",);
+app.put("/api", controller.replaceCollection);
 
 // DELETE /api
-app.delete("/api",);
+app.delete("/api", controller.deleteAllComics);
 
 // GET /api/id
-app.get("/api/:id",);
+app.get("/api/:id", controller.getComicById);
 
 // PUT /api/id
-app.put("/api/:id",);
+app.put("/api/:id", controller.updateComicById);
 
 // DELETE /api/id
-app.delete("/api/:id",);
+app.delete("/api/:id", controller.deleteComicById);
 
 
 app.listen(PORT, () => {

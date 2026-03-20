@@ -63,3 +63,52 @@ function createComic(comic, callback){
         }
     );
 }
+
+function replaceCollection(comics, callback){
+    db.serialize(() => {
+        db.run(`DELETE FROM comics`, (deleteErr) => {
+            if (deleteErr){
+                return callback(deleteErr);
+            }
+
+            if (comics.length === 0){
+                return callback(null);
+            }
+
+            const stmt = db.prepare(`
+                INSERT INTO comics
+                (seriesTitle, issueNumber, publisher, condtions, storageLocation, estimatedValue, lentOut)
+                VALUES(?, ?, ?, ?, ?, ?, ?)`);
+
+            for (const comic of comics){
+                stmt.run(
+                    comic.seriesTitle,
+                    comic.issueNumber,
+                    comic.publisher,
+                    comic.conditions,
+                    comic.storagelocation,
+                    comic.estimatedValue,
+                    comic.lentOut
+                );
+            }
+
+            stmt.finalize((finalizeErr) => {
+                if (finalizeErr) {
+                    return callback(finalizeErr);
+                }
+
+                callback(null);
+            });
+        });
+    });
+}
+
+function deleteAllComics(callback){
+    db.run(`DELETE FROM comics`, [], function (err){
+        if(err){
+            return callback(err);
+        }
+
+        callback(null);
+    });
+}

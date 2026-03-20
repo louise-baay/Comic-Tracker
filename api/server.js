@@ -50,19 +50,25 @@ app.get("/", (req, res) => {
 
 
 // GET /api
+app.get("/api",);
 
 // POST /api
+app.post("/api",);
 
 // PUT /api
+app.put("/api",);
 
 // DELETE /api
+app.delete("/api",);
 
 // GET /api/id
+app.get("/api/:id",);
 
 // PUT /api/id
+app.put("/api/:id",);
 
 // DELETE /api/id
-
+app.delete("/api/:id",);
 
 
 app.listen(PORT, () => {

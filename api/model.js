@@ -51,7 +51,7 @@ function createComic(comic, callback){
             comic.seriesTitle,
             comic.issueNumber,
             comic.publisher,
-            comic.conditions,
+            comic.condition,
             comic.storagelocation,
             comic.estimatedValue,
             comic.lentOut
@@ -85,7 +85,7 @@ function replaceCollection(comics, callback){
                     comic.seriesTitle,
                     comic.issueNumber,
                     comic.publisher,
-                    comic.conditions,
+                    comic.condition,
                     comic.storagelocation,
                     comic.estimatedValue,
                     comic.lentOut
@@ -110,5 +110,42 @@ function deleteAllComics(callback){
         }
 
         callback(null);
+    });
+}
+
+function updateComicById(id, comic, callback) {
+    const sql = `
+        UPDATE comics
+        SET seriesTitle = ?, issueNumber = ?, publisher = ?, condition = ?, storageLocation = ?, estimatedValue = ?, lentOut = ? WHERE id = ?`;
+    
+    db.run(
+        sql,
+        [
+            comic.seriesTitle,
+            comic.issueNumber,
+            comic.publisher,
+            comic.condition,
+            comic.storagelocation,
+            comic.estimatedValue,
+            comic.lentOut,
+            id
+        ],
+        function (err) {
+            if(err) {
+                return callback(err);
+            }
+
+            callback(null, this.changes);
+        }
+    );
+}
+
+function deleteComicById(id, callback){
+    db.run(`DELETE FROM comics WHERE id = ?`, [id], function(err){
+        if(err){
+            return callback(err);
+        }
+
+        callback(null, this.changes);
     });
 }

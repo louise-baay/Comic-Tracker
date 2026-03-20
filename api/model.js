@@ -1,3 +1,5 @@
+const { getComicById } = require("./controller");
+
 const sqlite3 = require("sqlite3").verbose();
 
 const db = new sqlite3.Database("./comics.db");
@@ -149,3 +151,13 @@ function deleteComicById(id, callback){
         callback(null, this.changes);
     });
 }
+
+module.exports = {
+    getAllComics,
+    createComic,
+    replaceCollection,
+    deleteAllComics,
+    getComicById,
+    updateComicById,
+    deleteComicById
+};

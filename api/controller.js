@@ -113,3 +113,78 @@ function getComicById(req, res){
     });
 }
 
+//PUT /api/:id
+function updateComicById(req,res){
+    const { id } = req.params;
+    
+    const {
+        seriesTitle,
+        issueNumber,
+        publisher,
+        condition,
+        storageLocation,
+        estimatedValue,
+        lentOut
+    } = req.body;
+
+    if(
+        seriesTitle === undefined ||
+        issueNumber === undefined ||
+        publisher === undefined ||
+        condition === undefined ||
+        storageLocation === undefined ||
+        estimatedValue === undefined ||
+        lentOut === undefined
+    ) {
+        return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    const comic = {
+        seriesTitle,
+        issueNumber,
+        publisher,
+        condition,
+        storageLocation,
+        estimatedValue,
+        lentOut
+    };
+
+    model.updateComicById(id, comic, function (err, changes){
+        if(err){
+            return res.status(500).json({ error: err.message });
+        }
+
+        if(changes === 0){
+            return res.status(404).json({ error: "Record not found" });
+        }
+
+        res.json({ status: `Record id=${id} updated`});
+    });    
+}
+
+//DELETE /api/:id
+function deleteComicById(req, res){
+    const { id } = req.params;
+
+    model.deleteComicById(id, function (err, changes){
+        if(err){
+            return res.status(500).json({ error: err.message });
+        }
+
+        if(changes === 0){
+            return res.status(404).json({ error: "Record not found" });
+        }
+
+        res.json({ status: `Record id=${id} deleted`});
+    });
+}
+
+module.exports = {
+    getAllComics,
+    createComic,
+    replaceCollection,
+    deleteAllComics,
+    getComicById,
+    updateComicById,
+    deleteComicById
+};

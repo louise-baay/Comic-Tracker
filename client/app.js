@@ -148,10 +148,73 @@ export default function App(){
         }
     }
 
+    async function deleteComic() {
+        try {
+            const resposne = await fetch(`${API_URL}/${id}`,{
+                method: "DELETE"
+            });
+
+            const data = await response.json();
+            setMessage(data.status || data.error || "Delete request completed.");
+
+            if(selectedComic && selectedComic.id === id){
+                clearForm();
+            }
+
+            fetchAllComics();
+        } catch (error){
+            setMessage("Failed to delete comic.");
+        }
+    }
+
+    async function deleteAllComics(){
+        try {
+            const response = await fetch(API_URL,{
+                method: "DELETE"
+            });
+
+            const data = await response.json();
+            setMessage(data.status || data.error || "Delete collection completed.");
+            clearForm();
+            fetchAllComics();
+        } catch(error){
+            setMessage("Failed to delete collection.");
+        }
+    }
     
+    async function replaceCollection() {
+        try {
+            const parsed = JSON.parse(replaceText);
 
+            const response = await fetch(API_URL, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(parsed)
+            });
 
+            const data = await response.json();
+            setMessage(data.status || data.error || "Replace collection completed.");
+            setReplaceText("");
+            clearForm();
+            fetchAllComics();
+        } catch (error) {
+            setMessage("Replace collection failed. Make sure the JSON is valid.");
+        }
+    }
 
+    function confirmDeleteAll(){
+        if (typeof windoe !== "undefined"){
+            const ok = window.confirm("Are you sure you want to delete the entire collection?");
+            if (ok) deleteAllComics();
+        } else {
+            Alert.alert("Confirm", "Are you sure you want to delete the entire collection?"[
+                { text: "Cancel", style: "cancel"},
+                { text: "Delete", style: "destructive", onPress: deleteAllComics }
+            ]);
+        }
+    }
 
     function renderComic({ item }){
         return (

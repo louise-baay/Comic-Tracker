@@ -114,6 +114,41 @@ export default function App(){
         }
     }
 
+    async function updateComic() {
+        if(!selectedComic){
+            setMessage("Select a comic first.");
+            return;
+        }
+
+        try{
+            const payload = {
+                seriesTitle: form.seriesTitle,
+                issueNumber: parseInt(form.issueNumber),
+                publisher: form.publisher,
+                condition: form.condition,
+                storageLocation: form.storageLocation,
+                estimatedValue: parseFloat(form.estimatedValue),
+                lentOut: parseInt(form.lentOut)
+            };
+
+            const response = await fetch(`${API_URL}/${selectedComic.id}`,{
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+            setMessage(data.status || data.error || "Update request completed.");
+            clearForm();
+            fetchAllComics();
+        } catch (error){
+            setMessage("Failed to update comic.");
+        }
+    }
+
+    
 
 
 
@@ -217,7 +252,7 @@ export default function App(){
                     </View>
                 </View>
 
-                
+
             </ScrollView>
 
 

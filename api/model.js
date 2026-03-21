@@ -41,7 +41,7 @@ function getAllComics(callback){
 function createComic(comic, callback){
     const sql = `
     INSERT INTO comics
-    (seriesTitle, issueNumber, publisher, conditions, storageLocation, estimatedValue, lentOut)
+    (seriesTitle, issueNumber, publisher, condition, storageLocation, estimatedValue, lentOut)
     VALUES(?, ?, ?, ?, ?, ?, ?)`;
 
     db.run(
@@ -51,7 +51,7 @@ function createComic(comic, callback){
             comic.issueNumber,
             comic.publisher,
             comic.condition,
-            comic.storagelocation,
+            comic.storageLocation,
             comic.estimatedValue,
             comic.lentOut
         ],
@@ -76,7 +76,7 @@ function replaceCollection(comics, callback){
 
             const stmt = db.prepare(`
                 INSERT INTO comics
-                (seriesTitle, issueNumber, publisher, conditions, storageLocation, estimatedValue, lentOut)
+                (seriesTitle, issueNumber, publisher, condition, storageLocation, estimatedValue, lentOut)
                 VALUES(?, ?, ?, ?, ?, ?, ?)`);
 
             for (const comic of comics){
@@ -85,7 +85,7 @@ function replaceCollection(comics, callback){
                     comic.issueNumber,
                     comic.publisher,
                     comic.condition,
-                    comic.storagelocation,
+                    comic.storageLocation,
                     comic.estimatedValue,
                     comic.lentOut
                 );
@@ -128,7 +128,7 @@ function updateComicById(id, comic, callback) {
             comic.issueNumber,
             comic.publisher,
             comic.condition,
-            comic.storagelocation,
+            comic.storageLocation,
             comic.estimatedValue,
             comic.lentOut,
             id

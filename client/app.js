@@ -140,12 +140,74 @@ export default function App(){
 
     return(
         <SafeAreaViewBase style={styles.container}>
+            <ScrollView>
+                <Text style={styles.header}>ComicShelf</Text>
+                <Text style={styles.subHeader}>Physical Comic Library Tracker</Text>
+
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>
+                        {selectedComic ? `Edit Comic (id=${selectedComic.id})` : "Add Comic"}
+                    </Text>
+
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Series Title"
+                        value={form.seriesTitle}
+                        onChangeText={(text) => updateForm("seriesTitle", text)}
+                    />
+
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Issue Number"
+                        value = {form.issueNumber}
+                        onChangeText={(text) => updateForm("issueNumber", text)}                    
+                    />
+
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Publisher"
+                        value = {form.publisher}
+                        onChangeText={(text) => updateForm("publisher", text)}  
+                    />
+
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Condition"
+                        value = {form.condition}
+                        onChangeText={(text) => updateForm("condition", text)}  
+                    />
+
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Storage Location"
+                        value = {form.storageLocation}
+                        onChangeText={(text) => updateForm("storageLocation", text)}  
+                    />
+
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Estimated Value"
+                        keyboardType="numeric"
+                        value = {form.estimatedValue}
+                        onChangeText={(text) => updateForm("estimatedValue", text)}  
+                    />
+
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Lent Out? 0 = No, 1 = Yes"
+                        keyboardType="numeric"
+                        value = {form.lentOut}
+                        onChangeText={(text) => updateForm("lentOut", text)}  
+                    />
+                   
+                </View>
+            </ScrollView>
 
 
 
 
 
-            
+
         </SafeAreaViewBase>
     )
 }

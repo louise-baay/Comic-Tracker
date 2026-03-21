@@ -10,9 +10,8 @@ import {
     Alert,
     ScrollView
 } from "react-native";
-import { getComicById } from "../api/model";
 
-const API_URL = "https://localhost:3000/api";
+const API_URL = "http://localhost:3000/api";
 
 const emptyForm = {
     seriesTitle: "",

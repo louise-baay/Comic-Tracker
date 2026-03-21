@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import {
+    SafeAreaViewBase,
+    View,
     Text,
     TextInput,
+    TouchableOpacity,
+    FlatList,
     StyleSheet,
+    Alert,
     ScrollView
 } from "react-native";
 
@@ -62,7 +67,7 @@ export default function App(){
                 condition: form.condition,
                 storageLocation: form.storageLocation,
                 estimatedValue: parseFloat(form.estimatedValue),
-                lentOut: parseInt(form.lentOut);
+                lentOut: parseInt(form.lentOut)
             };
 
             const response = await fetch(API_URL, {
@@ -81,16 +86,6 @@ export default function App(){
             setMessage("Failed to create comic.");
         }
     }
-
-    try{
-        const response = await fetch(`${API_URL}/${id}`);
-        const data = await response.json();
-
-        if(data.error){
-            setMessage()
-        }
-    }
-
 }
 
 const styles = StyleSheet.create({

@@ -60,15 +60,36 @@ export default function App(){
     //create comic
     async function createComic(){
         try{
+
+            if(
+                !form.seriesTitle.trim() ||
+                !form.issueNumber.trim() ||
+                !form.publisher.trim() ||
+                !form.condition.trim() ||
+                !form.storageLocation.trim() ||
+                !form.estimatedValue.trim()
+            ) {
+                setMessage("Please fill in all fields.");
+                return;
+            }
             const payload = {
-                seriesTitle: form.seriesTitle,
-                issueNumber: parseInt(form.issueNumber),
-                publisher: form.publisher,
-                condition: form.condition,
-                storageLocation: form.storageLocation,
-                estimatedValue: parseFloat(form.estimatedValue),
-                lentOut: parseInt(form.lentOut)
+                seriesTitle: form.seriesTitle.trim(),
+                issueNumber: Number(form.issueNumber),
+                publisher: form.publisher.trim(),
+                condition: form.condition.trim(),
+                storageLocation: form.storageLocation.trim(),
+                estimatedValue: Number(form.estimatedValue),
+                lentOut: Number(form.lentOut)
             };
+
+            if (
+                Number.isNaN(payload.issueNumber) ||
+                Number.isNaN(payload.estimatedValue) ||
+                Number.isNaN(payload.lentOut)
+            ) {
+                setMessage("Issue number, estimated value, and lent out must be valid numbers!");
+                return;
+            }
 
             const response = await fetch(API_URL, {
                 method: "POST",
@@ -79,6 +100,12 @@ export default function App(){
             });
             
             const data = await response.json();
+
+            if(!response.ok){
+                setMessage(data.error || "Failed to create comic.");
+                return;
+            }
+            
             setMessage(data.status || data.error || "Create requests completed.");
             clearForm();
             await fetchAllComics();

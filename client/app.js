@@ -10,6 +10,7 @@ import {
     Alert,
     ScrollView
 } from "react-native";
+import { getComicById } from "../api/model";
 
 const API_URL = "https://localhost:3000/api";
 
@@ -85,6 +86,29 @@ export default function App(){
         } catch (error) {
             setMessage("Failed to create comic.");
         }
+    }
+
+
+
+
+
+    function renderComic({ item }){
+        return (
+            <TouchableOpacity style={styles.card} onPress={() => getComicById(item.id)}>
+                <View style = {{ flex: 1 }}>
+                    <Text style={styles.cardTitle}> {item.seriesTitle} #{item.issueNumber} </Text>
+                    <Text style={styles.cardText}>Publisher: {item.publisher}</Text>
+                    <Text style={styles.cardText}>Conditon: {item.condition}</Text>
+                    <Text style={styles.cardText}>Location: {item.storageLocation}</Text>
+                    <Text style={styles.cardText}>Value: ${item.estimatedValue}</Text>
+                    <Text style={styles.cardText}>Lent Out: {item.lentOut === 1 ? "Yes" : "No"}</Text>
+                </View>
+
+                <TouchableOpacity style={styles.deleteButton} onPress={() => deleteComic(item.id)}>
+                    <Text style={styles.deleteButtonText}>Delete</Text>
+                </TouchableOpacity>
+            </TouchableOpacity>
+        );
     }
 }
 

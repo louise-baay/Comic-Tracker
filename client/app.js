@@ -409,4 +409,46 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         backgroundColor: "#fff"
     },
+    row: {
+        flexDirection: "row",
+        gap: 10
+    },
+    button: {
+        backgroundColor: "#2563eb",
+        paddingVertical: 10,
+        parddingHorizontal: 12,
+        borderRadius: 8,
+        marginLeft: 8
+    },
+    secondaryButton: {
+        backgroundColor: "#e5e7eb",
+        paddingVertical: 12,
+        paddingHorizontal: 16,
+        borderRadius: 8,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 4
+    },
+    dangerButton: {
+        backgroundColor: "#dc2626",
+        paddingVertical: 10,
+        paddingHorizontal: 12,
+        borderRadius: 8,
+        marginLeft: 8
+    },
+    deleteButton: {
+        backgroundColor: "#dc2626",
+        paddingVertical: 8,
+        paddingHorizontal: 12,
+        borderRadius: 8,
+        alignSelf: "center"
+    },
+    buttonText: {
+        color: "#ffffff",
+        fontWeight: "600"
+    },
+    secondaryButton: {
+        color: "#111827",
+        fontWeight: "600"
+    }
 });

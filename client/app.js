@@ -360,5 +360,53 @@ export default function App(){
 }
 
 const styles = StyleSheet.create({
-    
+    container:{
+        flex: 1,
+        backgroundColor: "#f4f6f8"
+    },
+    scrollContent: {
+        padding: 20
+    },
+    header: {
+        fontSize: 32,
+        fontWeight: "700",
+        marginBottom: 4,
+        color: "#1f2937"
+    },
+    subHeader: {
+        fontSize: 16,
+        color: "#4b5563"
+    },
+    section: {
+        backgroundColor: "#ffffff",
+        padding: 16,
+        borderRadius: 12,
+        marginBottom: 20,
+        borderWidth: 1,
+        borderColor: "#d1d5db"
+    },
+    sectionTitle: {
+        fontSize: 20,
+        fontWeight: "600",
+        marginBottom: 12,
+        color: "#111827"
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: "#cbd5e1",
+        borderRadius: 8,
+        padding: 10,
+        marginBottom: 10,
+        backgroundColor: "#fff"
+    },
+    largeInput: {
+        borderWidth: 1,
+        borderColor: "#cbd5e1",
+        borderRadius: 8,
+        padding:10,
+        minHeight: 120,
+        textAlignVertical: "top",
+        marginBottom: 10,
+        backgroundColor: "#fff"
+    },
 });

@@ -88,6 +88,32 @@ export default function App(){
         }
     }
 
+    async function getComicById(id){
+        try{
+            const response = await fetch(`${API_URL}/${id}`);
+            const data = await response.json();
+
+            if(data.error){
+                setMessage(data.error);
+                return;
+            }
+
+            setSelectedComic(data);
+            setForm({
+                seriesTitle: data.seriesTitle.toString(),
+                issueNumber: data.issueNumber.toString(),
+                publisher: data.publisher.toString(),
+                condition: data.condition.toString(),
+                storageLocation: data.storageLocation.toString(),
+                estimatedValue: data.estimatedValue.toString(),
+                lentOut: data.lentOut.toString()
+            });
+            setMessage(`Loaded comic id=${id}`);
+        } catch (error){
+            setMessage(`Failed to load comic id.`);
+        }
+    }
+
 
 
 
@@ -110,6 +136,18 @@ export default function App(){
             </TouchableOpacity>
         );
     }
+
+
+    return(
+        <SafeAreaViewBase style={styles.container}>
+
+
+
+
+
+            
+        </SafeAreaViewBase>
+    )
 }
 
 const styles = StyleSheet.create({

@@ -41,7 +41,7 @@ function getAllComics(callback){
 function createComic(comic, callback){
     const sql = `
     INSERT INTO comics
-    (seriesTitle, issueNumber, publisher, condtions, storageLocation, estimatedValue, lentOut)
+    (seriesTitle, issueNumber, publisher, conditions, storageLocation, estimatedValue, lentOut)
     VALUES(?, ?, ?, ?, ?, ?, ?)`;
 
     db.run(
@@ -76,7 +76,7 @@ function replaceCollection(comics, callback){
 
             const stmt = db.prepare(`
                 INSERT INTO comics
-                (seriesTitle, issueNumber, publisher, condtions, storageLocation, estimatedValue, lentOut)
+                (seriesTitle, issueNumber, publisher, conditions, storageLocation, estimatedValue, lentOut)
                 VALUES(?, ?, ?, ?, ?, ?, ?)`);
 
             for (const comic of comics){

@@ -73,7 +73,7 @@ export default function App(){
             const response = await fetch(API_URL, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "applications/json"
+                    "Content-Type": "application/json"
                 },
                 body: JSON.stringify(payload)
             });
@@ -147,9 +147,9 @@ export default function App(){
         }
     }
 
-    async function deleteComic() {
+    async function deleteComic(id) {
         try {
-            const resposne = await fetch(`${API_URL}/${id}`,{
+            const response = await fetch(`${API_URL}/${id}`,{
                 method: "DELETE"
             });
 
@@ -204,11 +204,11 @@ export default function App(){
     }
 
     function confirmDeleteAll(){
-        if (typeof windoe !== "undefined"){
+        if (typeof window !== "undefined"){
             const ok = window.confirm("Are you sure you want to delete the entire collection?");
             if (ok) deleteAllComics();
         } else {
-            Alert.alert("Confirm", "Are you sure you want to delete the entire collection?"[
+            Alert.alert("Confirm", "Are you sure you want to delete the entire collection?",[
                 { text: "Cancel", style: "cancel"},
                 { text: "Delete", style: "destructive", onPress: deleteAllComics }
             ]);
@@ -221,7 +221,7 @@ export default function App(){
                 <View style = {{ flex: 1 }}>
                     <Text style={styles.cardTitle}> {item.seriesTitle} #{item.issueNumber} </Text>
                     <Text style={styles.cardText}>Publisher: {item.publisher}</Text>
-                    <Text style={styles.cardText}>Conditon: {item.condition}</Text>
+                    <Text style={styles.cardText}>Condition: {item.condition}</Text>
                     <Text style={styles.cardText}>Location: {item.storageLocation}</Text>
                     <Text style={styles.cardText}>Value: ${item.estimatedValue}</Text>
                     <Text style={styles.cardText}>Lent Out: {item.lentOut === 1 ? "Yes" : "No"}</Text>
@@ -237,7 +237,7 @@ export default function App(){
 
     return(
         <SafeAreaViewBase style={styles.container}>
-            <ScrollView>
+            <ScrollView contentContainerStyle={styles.scrollContent}>
                 <Text style={styles.header}>ComicShelf</Text>
                 <Text style={styles.subHeader}>Physical Comic Library Tracker</Text>
 
@@ -256,6 +256,7 @@ export default function App(){
                     <TextInput
                         style={styles.input}
                         placeholder="Issue Number"
+                        keyboardType="numeric"
                         value = {form.issueNumber}
                         onChangeText={(text) => updateForm("issueNumber", text)}                    
                     />
@@ -415,7 +416,7 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: "#2563eb",
         paddingVertical: 10,
-        parddingHorizontal: 12,
+        paddingHorizontal: 12,
         borderRadius: 8,
         marginLeft: 8
     },
@@ -446,7 +447,7 @@ const styles = StyleSheet.create({
         color: "#ffffff",
         fontWeight: "600"
     },
-    secondaryButton: {
+    secondaryButtonText: {
         color: "#111827",
         fontWeight: "600"
     },
@@ -465,7 +466,7 @@ const styles = StyleSheet.create({
         borderColor: "#d1d5db",
         borderRadius: 10,
         padding: 12,
-        marginBottm: 10
+        marginBottom: 10
     },
     cardTitle: {
         fontSize: 18,
@@ -476,7 +477,7 @@ const styles = StyleSheet.create({
     cardText: {
         fontSize: 14,
         color: "#374151",
-        marginBottm: 2
+        marginBottom: 2
     },
     emptyText: {
         color: "#6b7280",

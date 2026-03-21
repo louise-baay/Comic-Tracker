@@ -336,7 +336,7 @@ export default function App(){
                             <TouchableOpacity style={styles.smallButton} onPress={fetchAllComics}>
                                 <Text style={styles.buttonText}>Refresh</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.smallButton} onPress={confirmDeleteAll}>
+                            <TouchableOpacity style={styles.dangerButton} onPress={confirmDeleteAll}>
                                 <Text style={styles.buttonText}>Delete All</Text>
                             </TouchableOpacity>
                         </View>

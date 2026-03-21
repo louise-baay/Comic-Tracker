@@ -315,16 +315,48 @@ export default function App(){
                     </View>
                 </View>
 
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>Replace Entire Collection</Text>
+                    <TextInput
+                        style={styles.largeInput}
+                        placeholder='Paste JSON array here, e.g [{"seriesTitle":"X-Men","issueNumber":1,"publisher":"Marvel","condition":"NM","storageLocation":"Box 2","estimatedValue":25.5,"lentOut":0}]'
+                        multiline
+                        value={replaceText}
+                        onChangeText={setReplaceText}
+                    />
+                    <TouchableOpacity style={styles.button} onPress={replaceCollection}>
+                        <Text style={styles.buttonText}>Replace Collection</Text>
+                    </TouchableOpacity>
+                </View>
 
+                <View style={styles.section}>
+                    <View style={styles.listHeaderRow}>
+                        <Text style={styles.sectionTitle}>Comic Collection</Text>
+                        <View style={styles.row}>
+                            <TouchableOpacity style={styles.smallButton} onPress={fetchAllComics}>
+                                <Text style={styles.buttonText}>Refresh</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.smallButton} onPress={confirmDeleteAll}>
+                                <Text style={styles.buttonText}>Delete All</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
+                    <FlatList
+                    data={comics}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={renderComic}
+                    scrollEnabled={false}
+                    ListEmptyComponent={
+                        <Text style={styles.emptyText}>No comics in collection.</Text>
+                    }
+                    />
+                </View>
+
+                {message ? <Text style={styles.message}>{message}</Text> : null}                
             </ScrollView>
-
-
-
-
-
-
         </SafeAreaViewBase>
-    )
+    );
 }
 
 const styles = StyleSheet.create({

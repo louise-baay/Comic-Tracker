@@ -199,8 +199,25 @@ export default function App(){
                         value = {form.lentOut}
                         onChangeText={(text) => updateForm("lentOut", text)}  
                     />
-                   
+
+                    <View style={styles.row}>
+                        {!selectedComic ? (
+                            <TouchableOpacity style={styles.button} onPress={createComic}>
+                                <Text style={styles.buttonText}>Add Comic</Text>
+                            </TouchableOpacity>
+                        ) : (
+                            <TouchableOpacity style={styles.button} onPress={updateComic}>
+                                <Text style={styles.buttonText}>Save Changes</Text>
+                            </TouchableOpacity>
+                        )}
+
+                        <TouchableOpacity style={styles.secondaryButton} onPress={clearForm}>
+                            <Text style={styles.secondaryButtonText}>Clear</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
+
+                
             </ScrollView>
 
 

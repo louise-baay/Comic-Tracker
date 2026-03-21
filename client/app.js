@@ -450,5 +450,46 @@ const styles = StyleSheet.create({
     secondaryButton: {
         color: "#111827",
         fontWeight: "600"
+    },
+    listHeaderRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 12
+    },
+    card: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "flex-start",
+        backgroundColor: "#f9fafb",
+        borderWidth: 1,
+        borderColor: "#d1d5db",
+        borderRadius: 10,
+        padding: 12,
+        marginBottm: 10
+    },
+    cardTitle: {
+        fontSize: 18,
+        fontWeight: "700",
+        marginBottom: 4,
+        color: "#111827"
+    },
+    cardText: {
+        fontSize: 14,
+        color: "#374151",
+        marginBottm: 2
+    },
+    emptyText: {
+        color: "#6b7280",
+        fontStyle: "italic"
+    },
+    message: {
+        fontSize: 15,
+        color: "#065f46",
+        backgroundColor: "#d1fae5",
+        borderWidth: 1,
+        borderColor: "#a7f3d0",
+        borderRadius: 8,
+        padding: 12
     }
 });

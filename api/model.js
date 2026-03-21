@@ -5,7 +5,7 @@ db.serialize(() => {
     db.run(`
         CREATE TABLE IF NOT EXISTS comics (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        seriesTITLE TEXT NOT NULL,
+        seriesTitle TEXT NOT NULL,
         issueNumber INTEGER NOT NULL,
         publisher TEXT NOT NULL,
         condition TEXT NOT NULL,
@@ -22,7 +22,7 @@ db.serialize(() => {
         if(row.count === 0){
             const stmt = db.prepare(`
                 INSERT INTO comics
-                (seriesTITLE, issueNumber, publisher, condition, storageLocation, estimatedValue, lentOut)
+                (seriesTitle, issueNumber, publisher, condition, storageLocation, estimatedValue, lentOut)
                 VALUES (?, ?, ?, ?, ?, ?, ?)`);
 
             stmt.run("Absolute Batman", 1, "DC", "NM", "Box 1", 25, 0);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
-    SafeAreaViewBase,
+    SafeAreaView,
     View,
     Text,
     TextInput,
@@ -81,7 +81,7 @@ export default function App(){
             const data = await response.json();
             setMessage(data.status || data.error || "Create requests completed.");
             clearForm();
-            fetchAllComics();
+            await fetchAllComics();
         } catch (error) {
             setMessage("Failed to create comic.");
         }
@@ -141,7 +141,7 @@ export default function App(){
             const data = await response.json();
             setMessage(data.status || data.error || "Update request completed.");
             clearForm();
-            fetchAllComics();
+            await fetchAllComics();
         } catch (error){
             setMessage("Failed to update comic.");
         }
@@ -160,7 +160,7 @@ export default function App(){
                 clearForm();
             }
 
-            fetchAllComics();
+            await fetchAllComics();
         } catch (error){
             setMessage("Failed to delete comic.");
         }
@@ -175,7 +175,7 @@ export default function App(){
             const data = await response.json();
             setMessage(data.status || data.error || "Delete collection completed.");
             clearForm();
-            fetchAllComics();
+            await fetchAllComics();
         } catch(error){
             setMessage("Failed to delete collection.");
         }
@@ -197,7 +197,7 @@ export default function App(){
             setMessage(data.status || data.error || "Replace collection completed.");
             setReplaceText("");
             clearForm();
-            fetchAllComics();
+            await fetchAllComics();
         } catch (error) {
             setMessage("Replace collection failed. Make sure the JSON is valid.");
         }
@@ -236,11 +236,11 @@ export default function App(){
 
 
     return(
-        <SafeAreaViewBase style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContent}>
                 <Text style={styles.header}>ComicShelf</Text>
                 <Text style={styles.subHeader}>Physical Comic Library Tracker</Text>
-
+                <Text>Comic count: {comics.length}</Text>
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>
                         {selectedComic ? `Edit Comic (id=${selectedComic.id})` : "Add Comic"}
@@ -355,7 +355,7 @@ export default function App(){
 
                 {message ? <Text style={styles.message}>{message}</Text> : null}                
             </ScrollView>
-        </SafeAreaViewBase>
+        </SafeAreaView>
     );
 }
 

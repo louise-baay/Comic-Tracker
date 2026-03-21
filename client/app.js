@@ -105,7 +105,7 @@ export default function App(){
                 setMessage(data.error || "Failed to create comic.");
                 return;
             }
-            
+
             setMessage(data.status || data.error || "Create requests completed.");
             clearForm();
             await fetchAllComics();
@@ -147,15 +147,37 @@ export default function App(){
         }
 
         try{
+
+            if(
+                !form.seriesTitle.trim() ||
+                !form.issueNumber.trim() ||
+                !form.publisher.trim() ||
+                !form.condition.trim() ||
+                !form.storageLocation.trim() ||
+                !form.estimatedValue.trim()
+            ) {
+                setMessage("Please fill in all fields.");
+                return;
+            }
+
             const payload = {
-                seriesTitle: form.seriesTitle,
-                issueNumber: parseInt(form.issueNumber),
-                publisher: form.publisher,
-                condition: form.condition,
-                storageLocation: form.storageLocation,
-                estimatedValue: parseFloat(form.estimatedValue),
-                lentOut: parseInt(form.lentOut)
+                seriesTitle: form.seriesTitle.trim(),
+                issueNumber: Number(form.issueNumber),
+                publisher: form.publisher.trim(),
+                condition: form.condition.trim(),
+                storageLocation: form.storageLocation.trim(),
+                estimatedValue: Number(form.estimatedValue),
+                lentOut: Number(form.lentOut)
             };
+
+            if (
+                Number.isNaN(payload.issueNumber) ||
+                Number.isNaN(payload.estimatedValue) ||
+                Number.isNaN(payload.lentOut)
+            ) {
+                setMessage("Issue number, estimated value, and lent out must be valid numbers!");
+                return;
+            }
 
             const response = await fetch(`${API_URL}/${selectedComic.id}`,{
                 method: "PUT",
@@ -166,6 +188,12 @@ export default function App(){
             });
 
             const data = await response.json();
+
+            if(!response.ok){
+                setMessage(data.error || "Failed to update comic.");
+                return;
+            }
+            
             setMessage(data.status || data.error || "Update request completed.");
             clearForm();
             await fetchAllComics();
@@ -181,6 +209,12 @@ export default function App(){
             });
 
             const data = await response.json();
+
+            if(!response.ok){
+                setMessage(data.error || "Failed to delete comic.");
+                return;
+            }
+
             setMessage(data.status || data.error || "Delete request completed.");
 
             if(selectedComic && selectedComic.id === id){
@@ -200,6 +234,12 @@ export default function App(){
             });
 
             const data = await response.json();
+
+            if(!response.ok){
+                setMessage(data.error || "Failed to delete collection.");
+                return;
+            }
+
             setMessage(data.status || data.error || "Delete collection completed.");
             clearForm();
             await fetchAllComics();
@@ -221,6 +261,14 @@ export default function App(){
             });
 
             const data = await response.json();
+
+            if(!response.ok){
+                setMessage(data.error) {
+                    setMessage(data.error || "Failed to replace collection.");
+                    return;
+                }
+            }
+
             setMessage(data.status || data.error || "Replace collection completed.");
             setReplaceText("");
             clearForm();
@@ -458,6 +506,13 @@ const styles = StyleSheet.create({
     },
     dangerButton: {
         backgroundColor: "#dc2626",
+        paddingVertical: 10,
+        paddingHorizontal: 12,
+        borderRadius: 8,
+        marginLeft: 8
+    },
+    smallButton:{
+        backgroundColor: "#2563eb",
         paddingVertical: 10,
         paddingHorizontal: 12,
         borderRadius: 8,

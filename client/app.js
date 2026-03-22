@@ -30,6 +30,7 @@ export default function App(){
     const [form, setForm] = useState(emptyForm);
     const [replaceText, setReplaceText] = useState("");
     const [message, setMessage] = useState("");
+    const [listKey, setListKey] = useState(0);
 
     useEffect(() => {
         fetchAllComics();
@@ -44,7 +45,8 @@ export default function App(){
             const data = await response.json();
 
             if(Array.isArray(data)){
-                setComics([...data]);
+                setComics([]);
+                setTimeout(() => setComics([...data]), 0);
             } else {
                 setComics([]);
                 setMessage("Could not fetch comics");
@@ -108,17 +110,17 @@ export default function App(){
                 body: JSON.stringify(payload)
             });
 
-            const data = await response.json();
-
-            if(!response.ok){
-                setMessage(data.error || "Failed to create comic.");
+            if(response.status === 204 || response.ok){
+                setMessage("Comic created successfully");
+                clearForm();
+                await fetchAllComics();
                 return;
             }
 
-            setMessage(data.status || "Create Requets completed");
-            clearForm();
-            await fetchAllComics();
+            const data = await response.json();
+            setMessage("Failed to create comic.");
         } catch (error) {
+            console.log("CREATE ERROR:", error.message, error);
             setMessage("Failed to create comic.");
         }   
     }
@@ -323,128 +325,128 @@ export default function App(){
             </View>
         );
     }
-
  
     return(
         <SafeAreaView style={styles.container}>
-            <ScrollView contentContainerStyle={styles.scrollContent}>
-                <Text style={styles.header}>ComicShelf</Text>
-                <Text style={styles.subHeader}>Physical Comic Library Tracker</Text>
-                <Text>Comic count: {comics.length}</Text>
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>
-                        {selectedComic ? `Edit Comic (id=${selectedComic.id})` : "Add Comic"}
-                    </Text>
+            <FlatList
+                key={listKey}
+                data={comics}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={renderComic}
+                extraData={comics}
+                ListHeaderComponent={
+                    <View style={styles.scrollContent}>
+                        <Text style={styles.header}>ComicShelf</Text>
+                        <Text style={styles.subHeader}>Physical Comic Library Tracker</Text>
+                        <Text>Comic count: {comics.length}</Text>
+                        <View style={styles.section}>
+                            <Text style={styles.sectionTitle}>
+                                {selectedComic ? `Edit Comic (id=${selectedComic.id})` : "Add Comic"}
+                            </Text>
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Series Title"
-                        value={form.seriesTitle}
-                        onChangeText={(text) => updateForm("seriesTitle", text)}
-                    />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Series Title"
+                                value={form.seriesTitle}
+                                onChangeText={(text) => updateForm("seriesTitle", text)}
+                            />
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Issue Number"
-                        keyboardType="numeric"
-                        value = {form.issueNumber}
-                        onChangeText={(text) => updateForm("issueNumber", text)}                    
-                    />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Issue Number"
+                                keyboardType="numeric"
+                                value = {form.issueNumber}
+                                onChangeText={(text) => updateForm("issueNumber", text)}                    
+                            />
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Publisher"
-                        value = {form.publisher}
-                        onChangeText={(text) => updateForm("publisher", text)}  
-                    />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Publisher"
+                                value = {form.publisher}
+                                onChangeText={(text) => updateForm("publisher", text)}  
+                            />
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Condition"
-                        value = {form.condition}
-                        onChangeText={(text) => updateForm("condition", text)}  
-                    />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Condition"
+                                value = {form.condition}
+                                onChangeText={(text) => updateForm("condition", text)}  
+                            />
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Storage Location"
-                        value = {form.storageLocation}
-                        onChangeText={(text) => updateForm("storageLocation", text)}  
-                    />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Storage Location"
+                                value = {form.storageLocation}
+                                onChangeText={(text) => updateForm("storageLocation", text)}  
+                            />
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Estimated Value"
-                        keyboardType="numeric"
-                        value = {form.estimatedValue}
-                        onChangeText={(text) => updateForm("estimatedValue", text)}  
-                    />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Estimated Value"
+                                keyboardType="numeric"
+                                value = {form.estimatedValue}
+                                onChangeText={(text) => updateForm("estimatedValue", text)}  
+                            />
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Lent Out? 0 = No, 1 = Yes"
-                        keyboardType="numeric"
-                        value = {form.lentOut}
-                        onChangeText={(text) => updateForm("lentOut", text)}  
-                    />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Lent Out? 0 = No, 1 = Yes"
+                                keyboardType="numeric"
+                                value = {form.lentOut}
+                                onChangeText={(text) => updateForm("lentOut", text)}  
+                            />
 
-                    <View style={styles.row}>
-                        {!selectedComic ? (
-                            <TouchableOpacity style={styles.button} onPress={createComic}>
-                                <Text style={styles.buttonText}>Add Comic</Text>
-                            </TouchableOpacity>
-                        ) : (
-                            <TouchableOpacity style={styles.button} onPress={updateComic}>
-                                <Text style={styles.buttonText}>Save Changes</Text>
-                            </TouchableOpacity>
-                        )}
+                            <View style={styles.row}>
+                                {!selectedComic ? (
+                                    <TouchableOpacity style={styles.button} onPress={createComic}>
+                                        <Text style={styles.buttonText}>Add Comic</Text>
+                                    </TouchableOpacity>
+                                ) : (
+                                    <TouchableOpacity style={styles.button} onPress={updateComic}>
+                                        <Text style={styles.buttonText}>Save Changes</Text>
+                                    </TouchableOpacity>
+                                )}
 
-                        <TouchableOpacity style={styles.secondaryButton} onPress={clearForm}>
-                            <Text style={styles.secondaryButtonText}>Clear</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                                <TouchableOpacity style={styles.secondaryButton} onPress={clearForm}>
+                                    <Text style={styles.secondaryButtonText}>Clear</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
 
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Replace Entire Collection</Text>
-                    <TextInput
-                        style={styles.largeInput}
-                        placeholder='Paste JSON array here, e.g [{"seriesTitle":"X-Men","issueNumber":1,"publisher":"Marvel","condition":"NM","storageLocation":"Box 2","estimatedValue":25.5,"lentOut":0}]'
-                        multiline
-                        value={replaceText}
-                        onChangeText={setReplaceText}
-                    />
-                    <TouchableOpacity style={styles.button} onPress={replaceCollection}>
-                        <Text style={styles.buttonText}>Replace Collection</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={styles.section}>
-                    <View style={styles.listHeaderRow}>
-                        <Text style={styles.sectionTitle}>Comic Collection</Text>
-                        <View style={styles.row}>
-                            <TouchableOpacity style={styles.smallButton} onPress={fetchAllComics}>
-                                <Text style={styles.buttonText}>Refresh</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.dangerButton} onPress={confirmDeleteAll}>
-                                <Text style={styles.buttonText}>Delete All</Text>
+                        <View style={styles.section}>
+                            <Text style={styles.sectionTitle}>Replace Entire Collection</Text>
+                            <TextInput
+                                style={styles.largeInput}
+                                placeholder='Paste JSON array here, e.g [{"seriesTitle":"X-Men","issueNumber":1,"publisher":"Marvel","condition":"NM","storageLocation":"Box 2","estimatedValue":25.5,"lentOut":0}]'
+                                multiline
+                                value={replaceText}
+                                onChangeText={setReplaceText}
+                            />
+                            <TouchableOpacity style={styles.button} onPress={replaceCollection}>
+                                <Text style={styles.buttonText}>Replace Collection</Text>
                             </TouchableOpacity>
                         </View>
-                    </View>
 
-                    {comics.length === 0 ? (
-                        <Text style={styles.emptyText}> No comics in collection.</Text>
-                    ) : (
-                        comics.map((item) => (
-                            <View key={item.id}>
-                                {renderComic ({ item })}
+                        <View style={styles.section}>
+                            <View style={styles.listHeaderRow}>
+                                <Text style={styles.sectionTitle}>Comic Collection</Text>
+                                <View style={styles.row}>
+                                    <TouchableOpacity style={styles.smallButton} onPress={fetchAllComics}>
+                                        <Text style={styles.buttonText}>Refresh</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={styles.dangerButton} onPress={confirmDeleteAll}>
+                                        <Text style={styles.buttonText}>Delete All</Text>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
-                        ))
-                    )}
-                </View>
-
-                {message ? <Text style={styles.message}>{message}</Text> : null}                
-            </ScrollView>
+                            {comics.length === 0 && (
+                                <Text style={styles.emptyText}>No Comics in collection.</Text>
+                            )}
+                        </View>
+                        {message ? <Text style={styles.message}>{message}</Text> : null}                
+                    </View>
+                }
+            />
         </SafeAreaView>
     );
 }

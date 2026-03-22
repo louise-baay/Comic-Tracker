@@ -59,7 +59,9 @@ export default function App(){
 
     //create comic
     async function createComic(){
+        console.log("createComic clicked");
         try{
+            console.log("Current form:", form);
 
             if(
                 !form.seriesTitle.trim() ||
@@ -69,6 +71,7 @@ export default function App(){
                 !form.storageLocation.trim() ||
                 !form.estimatedValue.trim()
             ) {
+                console.log("Stopped: missing field");
                 setMessage("Please fill in all fields.");
                 return;
             }
@@ -82,14 +85,19 @@ export default function App(){
                 lentOut: Number(form.lentOut)
             };
 
+            console.log("Payload created:", payload);
+
             if (
                 Number.isNaN(payload.issueNumber) ||
                 Number.isNaN(payload.estimatedValue) ||
                 Number.isNaN(payload.lentOut)
             ) {
+                console.log("Invalied number");
                 setMessage("Issue number, estimated value, and lent out must be valid numbers!");
                 return;
             }
+
+            console.log("About to POST");
 
             const response = await fetch(API_URL, {
                 method: "POST",
@@ -101,11 +109,27 @@ export default function App(){
             
             const data = await response.json();
 
+            console.log("POST response JSON", data);
+
+            console.log("POST Status:", response.status);
+            console.log("POST data:", data);
+
             if(!response.ok){
                 setMessage(data.error || "Failed to create comic.");
                 return;
             }
 
+            const refreshedResponse = await fetch(API_URL);
+            const refreshedData = await refreshedResponse.json();
+
+            console.log("GET after POST:", refreshedData);
+
+            if(!refreshedResponse.ok || !Array.isArray(refreshedData)){
+                setMessage("Comic added, but failed to refresh collection");
+            }
+
+            setComics([...refreshedData]);
+        
             setMessage(data.status || data.error || "Create requests completed.");
             clearForm();
             await fetchAllComics();
@@ -263,10 +287,8 @@ export default function App(){
             const data = await response.json();
 
             if(!response.ok){
-                setMessage(data.error) {
-                    setMessage(data.error || "Failed to replace collection.");
-                    return;
-                }
+                setMessage(data.error || "Failed to replace collection.");
+                return;
             }
 
             setMessage(data.status || data.error || "Replace collection completed.");
@@ -417,15 +439,15 @@ export default function App(){
                         </View>
                     </View>
 
-                    <FlatList
-                    data={comics}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={renderComic}
-                    scrollEnabled={false}
-                    ListEmptyComponent={
-                        <Text style={styles.emptyText}>No comics in collection.</Text>
-                    }
-                    />
+                    {comics.length === 0 ? (
+                        <Text style={styles.emptyText}> No comics in collection.</Text>
+                    ) : (
+                        comics.map((item) => (
+                            <View key={item.id}>
+                                {renderComic ({ item })}
+                            </View>
+                        ))
+                    )}
                 </View>
 
                 {message ? <Text style={styles.message}>{message}</Text> : null}                

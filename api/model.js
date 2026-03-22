@@ -35,7 +35,7 @@ db.serialize(() => {
 });
 
 function getAllComics(callback){
-    db.all(`SELECT * FROM comics ORDER BY id ASC`, [], callback);
+    db.all(`SELECT * FROM comics ORDER BY id DESC`, [], callback);
 }
 
 function createComic(comic, callback){
@@ -59,6 +59,7 @@ function createComic(comic, callback){
             if (err) {
                 return callback(err);
             }
+            callback(null, this.lastID);
         }
     );
 }

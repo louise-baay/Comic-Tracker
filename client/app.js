@@ -37,9 +37,18 @@ export default function App(){
 
     async function fetchAllComics() {
         try{
-            const response = await fetch(API_URL);
+            const response = await fetch(`${API_URL}?t=${Date.now()}`,{
+                method: "GET",
+                cache: "no-store"
+            });
             const data = await response.json();
-            setComics(data);
+
+            if(Array.isArray(data)){
+                setComics([...data]);
+            } else {
+                setComics([]);
+                setMessage("Could not fetch comics");
+            }
         } catch (error) {
             setMessage("Could not fetch comics.");
         }
@@ -59,10 +68,7 @@ export default function App(){
 
     //create comic
     async function createComic(){
-        console.log("createComic clicked");
-        try{
-            console.log("Current form:", form);
-
+        try {
             if(
                 !form.seriesTitle.trim() ||
                 !form.issueNumber.trim() ||
@@ -71,10 +77,10 @@ export default function App(){
                 !form.storageLocation.trim() ||
                 !form.estimatedValue.trim()
             ) {
-                console.log("Stopped: missing field");
-                setMessage("Please fill in all fields.");
+                setMessage("Please fill in all fields");
                 return;
             }
+
             const payload = {
                 seriesTitle: form.seriesTitle.trim(),
                 issueNumber: Number(form.issueNumber),
@@ -82,60 +88,39 @@ export default function App(){
                 condition: form.condition.trim(),
                 storageLocation: form.storageLocation.trim(),
                 estimatedValue: Number(form.estimatedValue),
-                lentOut: Number(form.lentOut)
+                lentOut: form.lentOut.trim() === "" ? 0 : Number(form.lentOut)
             };
 
-            console.log("Payload created:", payload);
-
-            if (
+            if(
                 Number.isNaN(payload.issueNumber) ||
                 Number.isNaN(payload.estimatedValue) ||
                 Number.isNaN(payload.lentOut)
             ) {
-                console.log("Invalied number");
-                setMessage("Issue number, estimated value, and lent out must be valid numbers!");
+                setMessage("Issue Number, Estimated Value, and Lent out must be valid numbers");
                 return;
             }
-
-            console.log("About to POST");
 
             const response = await fetch(API_URL, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type" : "application/json"
                 },
                 body: JSON.stringify(payload)
             });
-            
+
             const data = await response.json();
-
-            console.log("POST response JSON", data);
-
-            console.log("POST Status:", response.status);
-            console.log("POST data:", data);
 
             if(!response.ok){
                 setMessage(data.error || "Failed to create comic.");
                 return;
             }
 
-            const refreshedResponse = await fetch(API_URL);
-            const refreshedData = await refreshedResponse.json();
-
-            console.log("GET after POST:", refreshedData);
-
-            if(!refreshedResponse.ok || !Array.isArray(refreshedData)){
-                setMessage("Comic added, but failed to refresh collection");
-            }
-
-            setComics([...refreshedData]);
-        
-            setMessage(data.status || data.error || "Create requests completed.");
+            setMessage(data.status || "Create Requets completed");
             clearForm();
             await fetchAllComics();
         } catch (error) {
             setMessage("Failed to create comic.");
-        }
+        }   
     }
 
     async function getComicById(id){
@@ -191,7 +176,7 @@ export default function App(){
                 condition: form.condition.trim(),
                 storageLocation: form.storageLocation.trim(),
                 estimatedValue: Number(form.estimatedValue),
-                lentOut: Number(form.lentOut)
+                lentOut: form.lentOut.trim() === "" ? 0 : Number(form.lentOut)
             };
 
             if (
@@ -314,7 +299,7 @@ export default function App(){
 
     function renderComic({ item }){
         return (
-            <TouchableOpacity style={styles.card} onPress={() => getComicById(item.id)}>
+            <View style={styles.card}>
                 <View style = {{ flex: 1 }}>
                     <Text style={styles.cardTitle}> {item.seriesTitle} #{item.issueNumber} </Text>
                     <Text style={styles.cardText}>Publisher: {item.publisher}</Text>
@@ -324,10 +309,18 @@ export default function App(){
                     <Text style={styles.cardText}>Lent Out: {item.lentOut === 1 ? "Yes" : "No"}</Text>
                 </View>
 
-                <TouchableOpacity style={styles.deleteButton} onPress={() => deleteComic(item.id)}>
+
+                <View style={{ justifyContent: "center", gap: 8}}>
+                    <TouchableOpacity style={styles.smallButton} onPress={() => getComicById(item.id)}>
+                    <Text style={styles.buttonText}>Edit</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.deleteButton} onPress={() => deleteComic(item.id)}>
                     <Text style={styles.deleteButtonText}>Delete</Text>
-                </TouchableOpacity>
-            </TouchableOpacity>
+                    </TouchableOpacity>
+                </View>
+                
+            </View>
         );
     }
 

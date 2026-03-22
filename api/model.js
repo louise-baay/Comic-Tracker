@@ -59,7 +59,7 @@ function createComic(comic, callback){
             if (err) {
                 return callback(err);
             }
-            callback(null, this.lastID);
+            callback(null, this.lastID);//big bug
         }
     );
 }

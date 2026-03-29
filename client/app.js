@@ -325,7 +325,7 @@ export default function App(){
             </View>
         );
     }
- 
+ //testing testing 
     return(
         <SafeAreaView style={styles.container}>
             <FlatList

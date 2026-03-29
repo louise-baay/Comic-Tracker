@@ -20,7 +20,7 @@ const emptyForm = {
     condition: "",
     storageLocation: "",
     estimatedValue: "",
-    lentOut: "0"
+    lentOut: ""
 };
 
 
@@ -390,7 +390,7 @@ export default function App(){
 
                             <TextInput
                                 style={styles.input}
-                                placeholder="Lent Out? 0 = No, 1 = Yes"
+                                placeholder="Lent Out? Yes = 1 or No = 0"
                                 keyboardType="numeric"
                                 value = {form.lentOut}
                                 onChangeText={(text) => updateForm("lentOut", text)}  

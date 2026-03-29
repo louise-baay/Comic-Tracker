@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
     SafeAreaView,
     View,
@@ -8,7 +8,6 @@ import {
     FlatList,
     StyleSheet,
     Alert,
-    ScrollView
 } from "react-native";
 
 const API_URL = "http://localhost:3000/api";
@@ -30,7 +29,7 @@ export default function App(){
     const [form, setForm] = useState(emptyForm);
     const [replaceText, setReplaceText] = useState("");
     const [message, setMessage] = useState("");
-    const [listKey, setListKey] = useState(0);
+    const listRef = useRef(null);
 
     useEffect(() => {
         fetchAllComics();
@@ -146,6 +145,8 @@ export default function App(){
                 lentOut: data.lentOut.toString()
             });
             setMessage(`Loaded comic id=${id}`);
+
+            listRef.current?.scrollToOffset({offset:0, animated:true});
         } catch (error){
             setMessage(`Failed to load comic id.`);
         }
@@ -329,7 +330,7 @@ export default function App(){
     return(
         <SafeAreaView style={styles.container}>
             <FlatList
-                key={listKey}
+                ref={listRef}
                 data={comics}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={renderComic}

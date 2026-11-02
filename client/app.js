@@ -24,12 +24,12 @@ const emptyForm = {
 
 
 export default function App(){
-    const [comics, setComics] = useState([]);
-    const [selectedComic, setSelectedComic] = useState(null);
-    const [form, setForm] = useState(emptyForm);
-    const [replaceText, setReplaceText] = useState("");
-    const [message, setMessage] = useState("");
-    const listRef = useRef(null);
+    const [comics, setComics] = useState([]);//initalize comics as an array of comics
+    const [selectedComic, setSelectedComic] = useState(null);//initialize selectedComic as waiting for an API data response
+    const [form, setForm] = useState(emptyForm);//initialize the objects for the form
+    const [replaceText, setReplaceText] = useState("");//initialize empty string
+    const [message, setMessage] = useState("");//initialize empty string
+    const listRef = useRef(null);//used to scroll into view when updating a
 
     useEffect(() => {
         fetchAllComics();
